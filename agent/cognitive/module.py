@@ -75,15 +75,21 @@ class BGComponent(brica1.Component):
 
     def end(self, reward):  # Episode Terminated
         app_logger.info('episode finished. Reward:{:.1f} / Epsilon:{:.6f}'.format(reward, self.epsilon))
-        self.replayed_experience = self.get_in_port('UB-BG-Input').buffer
+        ub_bg_input = self.get_in_port('UB-BG-Input').buffer
+        self.replayed_experience = ub_bg_input[:6]
+        self.preplayed_experience = ub_bg_input[6:]
+        self.q_net.update_model(self.preplayed_experience, step=False)
         self.q_net.update_model(self.replayed_experience)
 
     def fire(self):
         reward = self.get_in_port('RB-BG-Input').buffer
         features = self.get_in_port('Isocortex#VVC-BG-Input').buffer
-        self.replayed_experience = self.get_in_port('UB-BG-Input').buffer
+        ub_bg_input = self.get_in_port('UB-BG-Input').buffer
+        self.replayed_experience = ub_bg_input[:6]
+        self.preplayed_experience = ub_bg_input[6:]
 
         action, eps, q_max = self.q_net.step(features)
+        self.q_net.update_model(self.preplayed_experience, step=False)
         self.q_net.update_model(self.replayed_experience)
 
         app_logger.info('Step:{}  Action:{}  Reward:{:.1f}  Epsilon:{:.6f}  Q_max:{:3f}'.format(
@@ -112,18 +118,27 @@ class UBComponent(brica1.Component):
 
     def end(self, action, reward):
         self.time += 1
+        preplay_start, s_preplay, a_preplay, r_preplay, s_dash_preplay, episode_end_preplay = \
+            self.experience.preplay(self.time)
         replay_start, s_replay, a_replay, r_replay, s_dash_replay, episode_end_replay = \
             self.experience.end_episode(self.time, self.last_state, action, reward)
-        self.results['UB-BG-Output'] = [replay_start, s_replay, a_replay, r_replay, s_dash_replay, episode_end_replay]
+
+        self.results['UB-BG-Output'] = [replay_start, s_replay, a_replay, r_replay, s_dash_replay, episode_end_replay, \
+                                        preplay_start, s_preplay, a_preplay, r_preplay, s_dash_preplay, episode_end_preplay]
 
     def fire(self):
         self.state = self.get_in_port('Isocortex#VVC-UB-Input').buffer
         action, reward = self.get_in_port('Isocortex#FL-UB-Input').buffer
         self.experience.stock(self.time, self.last_state, action, reward, self.state, False)
+
+        preplay_start, s_preplay, a_preplay, r_preplay, s_dash_preplay, episode_end_preplay = \
+            self.experience.preplay(self.time)
+
         replay_start, s_replay, a_replay, r_replay, s_dash_replay, episode_end_replay = \
             self.experience.replay(self.time)
 
-        self.results['UB-BG-Output'] = [replay_start, s_replay, a_replay, r_replay, s_dash_replay, episode_end_replay]
+        self.results['UB-BG-Output'] = [replay_start, s_replay, a_replay, r_replay, s_dash_replay, episode_end_replay, \
+                                        preplay_start, s_preplay, a_preplay, r_preplay, s_dash_preplay, episode_end_preplay]
         self.last_state = self.state.copy()
         self.time += 1
 

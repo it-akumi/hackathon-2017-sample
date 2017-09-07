@@ -133,7 +133,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='LIS Backend')
-    parser.add_argument('--host', default='localhost', type=str, help='Server hostname')
+    parser.add_argument('--host', default='0.0.0.0', type=str, help='Server hostname')
     parser.add_argument('--port', default=8765, type=int, help='Server port number')
     args = parser.parse_args()
 

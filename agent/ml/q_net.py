@@ -146,7 +146,7 @@ class QNet:
 
         return return_action
 
-    def update_model(self, replayed_experience):
+    def update_model(self, replayed_experience, step=True):
         if replayed_experience[0]:
             self.optimizer.zero_grads()
             loss, _ = self.forward(replayed_experience[1], replayed_experience[2],
@@ -159,8 +159,9 @@ class QNet:
             app_logger.info("Model Updated")
             self.target_model_update()
 
-        self.time += 1
-        app_logger.info("step: {}".format(self.time))
+        if step:
+            self.time += 1
+            app_logger.info("step: {}".format(self.time))
 
     def step(self, features):
         if self.hist_size == 4:
