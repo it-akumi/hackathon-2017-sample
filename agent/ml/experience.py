@@ -121,7 +121,7 @@ class Experience:
             choice = all_choice[:self.preplay_data_size]
 
             index=0
-            for c in xrange(choice):
+            for c in choice:
                 self.preplay_d[0][index] = self.d[0][c]
                 self.preplay_d[1][index] = self.d[1][c]
                 self.preplay_d[2][index] = self.d[2][c]
