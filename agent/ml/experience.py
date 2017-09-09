@@ -99,10 +99,10 @@ class Experience:
         if self.initial_exploration < time:
             preplay_start = True
             # Pick up replay_size number of samples from the Data
-            if time < self.preplay_data_size:  # during the first sweep of the History Data
+            if time < self.data_size:  # during the first sweep of the History Data
                 preplay_index = np.random.randint(0, time, (self.preplay_size, 1))
             else:
-                preplay_index = np.random.randint(0, self.preplay_data_size, (self.preplay_size, 1))
+                preplay_index = np.random.randint(0, self.data_size, (self.preplay_size, 1))
 
             a_all = np.array([0, 1, 2], dtype=np.uint8)
 
@@ -131,9 +131,9 @@ class Experience:
 
 
             for i in xrange(self.preplay_size):
-                s_preplay[i] = np.asarray(self.preplay_d[0][preplay_index[i]], dtype=np.float32)
+                s_preplay[i] = np.asarray(self.d[0][preplay_index[i]], dtype=np.float32)
 
-                not_a = self.preplay_d[1][preplay_index[i]]
+                not_a = self.d[1][preplay_index[i]]
                 a_preplay[i] = np.delete(a_all, not_a)[np.random.randint(0, 2)]
 
                 if self.use_gpu >= 0:
