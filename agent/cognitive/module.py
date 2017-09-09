@@ -78,7 +78,7 @@ class BGComponent(brica1.Component):
         ub_bg_input = self.get_in_port('UB-BG-Input').buffer
         self.replayed_experience = ub_bg_input[:6]
         self.preplayed_experience = ub_bg_input[6:]
-        self.q_net.update_model(self.preplayed_experience, step=False)
+        self.q_net.update_model_preplay(self.preplayed_experience)
         self.q_net.update_model(self.replayed_experience)
 
     def fire(self):
@@ -89,7 +89,7 @@ class BGComponent(brica1.Component):
         self.preplayed_experience = ub_bg_input[6:]
 
         action, eps, q_max = self.q_net.step(features)
-        self.q_net.update_model(self.preplayed_experience, step=False)
+        self.q_net.update_model_preplay(self.preplayed_experience)
         self.q_net.update_model(self.replayed_experience)
 
         app_logger.info('Step:{}  Action:{}  Reward:{:.1f}  Epsilon:{:.6f}  Q_max:{:3f}'.format(

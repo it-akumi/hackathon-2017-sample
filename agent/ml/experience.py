@@ -16,7 +16,7 @@ class Experience:
         self.data_size = data_size
         self.preplay_data_size = 100
         self.replay_size = replay_size
-        self.preplay_size = replay_size
+        self.preplay_size = 5
         self.hist_size = hist_size
         # self.initial_exploration = 10
         self.initial_exploration = initial_exploration
