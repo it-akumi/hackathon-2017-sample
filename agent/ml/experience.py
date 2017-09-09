@@ -50,6 +50,7 @@ class Experience:
             self.d[3][data_index] = np.array(state_dash, dtype=np.float32)
         self.d[4][data_index] = episode_end_flag
 
+        '''
         if episode_end_flag is True:
             self.preplay_d[0][preplay_data_index] = np.array(state, dtype=np.float32)
             self.preplay_d[1][preplay_data_index] = action
@@ -60,7 +61,7 @@ class Experience:
             self.preplay_d[2][preplay_data_index] = reward
             self.preplay_d[3][preplay_data_index] = np.array(state_dash, dtype=np.float32)
         self.preplay_d[4][preplay_data_index] = episode_end_flag
-
+        '''
 
     def replay(self, time):
         replay_start = False
@@ -110,6 +111,25 @@ class Experience:
             r_preplay = np.ndarray(shape=(self.preplay_size, 1), dtype=np.float32)
             s_dash_preplay = np.ndarray(shape=(self.preplay_size, self.hist_size, self.dim), dtype=np.float32)
             episode_end_preplay = np.ndarray(shape=(self.preplay_size, 1), dtype=np.bool)
+
+            all_choice = []
+            if time < self.data_size:
+                all_choice = np.arange(time)
+            else:
+                all_choice = np.arange(self.data_size)
+            np.random.shuffle(all_choice)
+            choice = all_choice[:self.preplay_data_size]
+
+            index=0
+            for c in xrange(choice):
+                self.preplay_d[0][index] = self.d[0][c]
+                self.preplay_d[1][index] = self.d[1][c]
+                self.preplay_d[2][index] = self.d[2][c]
+                self.preplay_d[3][index] = self.d[3][c]
+                self.preplay_d[4][index] = self.d[4][c]
+                index += 1
+
+
             for i in xrange(self.preplay_size):
                 s_preplay[i] = np.asarray(self.preplay_d[0][preplay_index[i]], dtype=np.float32)
 
