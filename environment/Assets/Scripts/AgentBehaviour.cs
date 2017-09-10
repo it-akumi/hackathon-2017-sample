@@ -69,11 +69,11 @@ public class AgentBehaviour : MonoBehaviour {
         controller = GetComponent<AgentController>();
         sensor = GetComponent<AgentSensor>();
     }
-	
+
     void LateUpdate () {
         if(!created) {
             if(!client.Calling) {
-                client.Create(GenerateMessage());
+		client.Create(GenerateMessage());
                 created = true;
             }
         } else {
@@ -83,7 +83,7 @@ public class AgentBehaviour : MonoBehaviour {
                 
             }
             if(!client.Calling) {
-                client.Step(GenerateMessage());
+		client.Step(GenerateMessage());
             }
         }
     }
