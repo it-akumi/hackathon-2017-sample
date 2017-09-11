@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.IO;
 
 
 public class AgentSensor : MonoBehaviour {
@@ -11,6 +12,7 @@ public class AgentSensor : MonoBehaviour {
 
     private List<Texture2D> rgbTextures;
     private List<Texture2D> depthTextures;
+    private int cameraCount = 0;
 
 
     Texture2D generateTexture(Camera cam) {
@@ -26,6 +28,12 @@ public class AgentSensor : MonoBehaviour {
         tex.ReadPixels(new Rect(0, 0, cam.targetTexture.width, cam.targetTexture.height), 0, 0);
         tex.Apply();
         RenderTexture.active = currentRenderTexture;
+
+	// Save image
+	byte [] bytes = tex.EncodeToPNG();
+	File.WriteAllBytes(Application.dataPath + string.Format("/../SavedScreen{0}.png", cameraCount), bytes);
+	cameraCount++;
+
         return tex.EncodeToPNG();
     }
 

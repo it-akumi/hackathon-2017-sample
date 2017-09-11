@@ -27,12 +27,14 @@ def main():
         data = np.loadtxt(args.csv, delimiter=',')
     else:
         print 'must csv data file'
+        exit(-1)
 
     if not args.csv:
         print 'must csv data file'
+        exit(-1)
 
 
-    func = None
+    func = norm
     if args.func == 'norm':
         func = norm
     else:

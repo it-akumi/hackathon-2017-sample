@@ -4,3 +4,4 @@ cherrypy
 msgpack-python
 pillow
 argparse
+scipy
