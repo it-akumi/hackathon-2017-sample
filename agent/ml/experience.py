@@ -14,7 +14,7 @@ class Experience:
 
         self.use_gpu = use_gpu
         self.data_size = data_size
-        self.preplay_data_size = 100
+        self.preplay_data_size = 10000
         self.replay_size = replay_size
         self.preplay_size = 5
         self.hist_size = hist_size
@@ -137,8 +137,8 @@ class Experience:
                 a_preplay[i] = np.delete(a_all, not_a)[np.random.randint(0, 2)]
 
                 if self.use_gpu >= 0:
-                    # similar_state_index = self._similar_state_index_norm_gpu(s_preplay[i], time)
-                    similar_state_index = self._similar_state_index_cos_gpu(s_preplay[i], time)
+                    similar_state_index = self._similar_state_index_norm_gpu(s_preplay[i], time)
+                    # similar_state_index = self._similar_state_index_cos_gpu(s_preplay[i], time)
                 else:
                     # similar_state_index = self._similar_state_index_norm(s_preplay[i], time)
                     similar_state_index = self._similar_state_index_cos(s_preplay[i], time)
