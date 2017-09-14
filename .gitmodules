@@ -1,0 +1,3 @@
+[submodule "agent/ml/PredNet"]
+	path = agent/ml/PredNet
+	url = https://github.com/quadjr/PredNet.git
