@@ -140,7 +140,7 @@ class Root(object):
 
 def main(args):
     cherrypy.config.update({'server.socket_host': args.host, 'server.socket_port': args.port, 'log.screen': False,
-                            'log.access_file': CHERRYPY_ACCESS_LOG, 'log.error_file': CHERRYPY_ERROR_LOG})
+                            'log.access_file': CHERRYPY_ACCESS_LOG, 'log.error_file': CHERRYPY_ERROR_LOG, 'server.thread_pool': 1})
     cherrypy.quickstart(Root())
 
 if __name__ == '__main__':
