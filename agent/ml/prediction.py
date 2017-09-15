@@ -47,6 +47,9 @@ class Prediction:
         serializers.load_npz(os.path.abspath(os.path.dirname(__file__)) + '/models/depth_stright_300000.model', self.depth2model)
 
         if self.gpu >= 0:
+            cuda.check_cuda_available()
+            cuda.get_device(self.gpu).use()
+
             self.rgb0model.to_gpu()
             self.rgb1model.to_gpu()
             self.rgb2model.to_gpu()
@@ -105,8 +108,8 @@ class Prediction:
         rgb_result = self._result_image(rgb_model.y.data[0].copy(), size=[200,200])
         depth_result = self._result_image(depth_model.y.data[0].copy(), size=[32,32])
         if self.gpu >= 0:
-            rgb_model.to_cpu()
-            depth_model.to_cpu()
+            rgb_model.to_gpu()
+            depth_model.to_gpu()
         return rgb_result, depth_result
 
 
