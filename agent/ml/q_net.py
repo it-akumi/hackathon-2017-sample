@@ -162,6 +162,15 @@ class QNet:
         self.time += 1
         app_logger.info("step: {}".format(self.time))
 
+    def update_model_preplay(self, preplayed_experience):
+        if preplayed_experience[0]:
+            self.optimizer.zero_grads()
+            loss, _ = self.forward(preplayed_experience[1], preplayed_experience[2],
+                                        preplayed_experience[3], preplayed_experience[4], preplayed_experience[5])
+            loss.backward()
+            self.optimizer.update()
+
+
     def step(self, features):
         if self.hist_size == 4:
             self.state = np.asanyarray([self.state[1], self.state[2], self.state[3], features], dtype=np.uint8)
