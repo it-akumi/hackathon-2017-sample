@@ -100,11 +100,13 @@ class Prediction:
         loss.unchain_backward()
         loss = 0
         if self.gpu >= 0:
-            model.to_cpu()
+            rgb_model.to_cpu()
+            depth_model.to_cpu()
         rgb_result = self._result_image(rgb_model.y.data[0].copy(), size=[200,200])
         depth_result = self._result_image(depth_model.y.data[0].copy(), size=[32,32])
         if self.gpu >= 0:
-            model.to_gpu()
+            rgb_model.to_cpu()
+            depth_model.to_cpu()
         return rgb_result, depth_result
 
 
