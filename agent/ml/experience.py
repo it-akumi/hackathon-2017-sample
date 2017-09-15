@@ -10,6 +10,7 @@ class Experience:
         self.use_gpu = use_gpu
         self.data_size = data_size
         self.replay_size = replay_size
+        self.preplay_size = replay_size
         self.hist_size = hist_size
         # self.initial_exploration = 10
         self.initial_exploration = initial_exploration
