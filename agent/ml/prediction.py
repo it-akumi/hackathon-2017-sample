@@ -13,6 +13,9 @@ import sys
 sys.path.append(os.path.abspath(os.path.dirname(__file__)) + '/PredNet')
 import net
 
+import threading
+LOCK = threading.Lock()
+
 class Prediction:
     def __init__(self, gpu):
         self.channels = [3,48,96,192]
@@ -102,6 +105,7 @@ class Prediction:
                       chainer.Variable(xp.asarray(depth_y_batch)))
         loss.unchain_backward()
         loss = 0
+        LOCK.acquire()
         if self.gpu >= 0:
             rgb_model.to_cpu()
             depth_model.to_cpu()
@@ -110,6 +114,7 @@ class Prediction:
         if self.gpu >= 0:
             rgb_model.to_gpu()
             depth_model.to_gpu()
+        LOCK.release()
         return rgb_result, depth_result
 
 
