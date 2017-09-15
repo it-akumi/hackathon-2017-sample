@@ -109,10 +109,10 @@ class Experience:
                 episode_end_preplay[i] = self.d[4][preplay_index[i]]
 
             if self.use_gpu >= 0:
-                s_replay = cuda.to_gpu(s_preplay)
-                s_dash_replay = cuda.to_gpu(s_dash_preplay)
+                s_preplay = cuda.to_gpu(s_preplay)
+                s_dash_preplay = cuda.to_gpu(s_dash_preplay)
 
-            return preplay_start, s_replay, a_preplay, r_preplay, s_dash_replay, episode_end_preplay
+            return preplay_start, s_preplay, a_preplay, r_preplay, s_dash_preplay, episode_end_preplay
 
         else:
             return preplay_start, 0, 0, 0, 0, False
